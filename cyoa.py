@@ -18,6 +18,7 @@ def pathMap(*args,**kwargs):
     pathDictionary["bfill"] = "Go over the bridge"
     pathDictionary["cfill"] = "Go into the dark and scary cave"
 
+    #break out path. to do: move path to CSV lookup
     if len(currentPath)==2:
         if currentPath[1] == 1:
             pathDictionary["advText"] = "Day slowly turns into night as you leisurely walk down the path. You camp for the night in a pleasant stand of trees. During the night you are awoken by a horrible screetching and a hulking shadow falls over your tent!"
@@ -36,6 +37,25 @@ def pathMap(*args,**kwargs):
         if currentPath[1]==2:
             pass
         if currentPath[1]==3:
+            pass
+    if len(currentPath) == 3:
+        if currentPath == [0,1,1]:
+            pass
+        if currentPath == [0,1,2]:
+            pass
+        if currentPath == [0,1,3]:
+            pass
+        if currentPath == [0,2,1]:
+            pass
+        if currentPath == [0,2,2]:
+            pass
+        if currentPath == [0,2,3]:
+            pass
+        if currentPath == [0,3,1]:
+            pass
+        if currentPath == [0,3,2]:
+            pass
+        if currentPath == [0,3,3]:
             pass
 
     return(pathDictionary)
