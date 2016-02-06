@@ -45,16 +45,83 @@ def addAdventure(**kwargs):
                     VALUES ('{}','{}','{}','{}','{}');".format(PATH, ADVTEXT, A, B, C))
     conn.commit()
 
+def getChar(**kwargs):
+    sql = "SELECT {0}_id FROM {0}_tbl WHERE {0} = '{1}' LIMIT 1;".format(
+        kwargs.get("tableName","class"),
+        kwargs.get("fieldName"))
+
+    results = conn.execute(sql)
+    for result in results:
+        for r in result:
+            return r
+
+def getPath(*args, **kwargs):
+    """
+
+    :rtype: object
+    """
+
+    #set variables to use in query
+    currentPath = args
+    pathDictionary = kwargs
+    pathDictionary["gold"]=kwargs.get("gold",100)
+    pathDictionary["life"]=kwargs.get("life",100)
+
+    strPath = ','.join(map(str, currentPath))
+
+    classId = getChar(tableName= "class",fieldName=pathDictionary.get("classAns"))
+    raceId   = getChar(tableName="race",fieldName=pathDictionary.get('raceAns'))
+    print("Race id {}, class id {}".format(raceId,classId))
+
+    #SQL Query creation
+    sql = "SELECT * FROM adv_tbl WHERE path = '{}';".format(strPath)
+    print(sql)
+    results = conn.execute(sql)
+
+    for r in results:
+
+        if r[1] == classId and r[2] == raceId:
+            print("match both")
+            pathDictionary["advText"]= r[4]
+            pathDictionary["afill"] = r[5]
+            pathDictionary["bfill"] = r[6]
+            pathDictionary["cfill"] = r[7]
+            return pathDictionary
+
+        if r[1] == classId or r[2] == raceId:
+            print("match one")
+            pathDictionary["advText"]= r[4]
+            pathDictionary["afill"] = r[5]
+            pathDictionary["bfill"] = r[6]
+            pathDictionary["cfill"] = r[7]
+            return pathDictionary
+
+        if r[1]==None and r[2] == None:
+            print("match none")
+            pathDictionary["advText"]= r[4]
+            pathDictionary["afill"] = r[5]
+            pathDictionary["bfill"] = r[6]
+            pathDictionary["cfill"] = r[7]
+            return pathDictionary
+
+        else:
+            print("no match")
+
+
 def main():
-    parameterList = dict(path = "",
+    '''    parameterList = dict(path = "",
                         advText = "",
                         a = "",
                         b = "",
                         c = "",
                         class_= 0,
                         race = 0)
+    '''
+    #    addAdventure(**parameterList)
 
-    addAdventure(**parameterList)
+    #test getPath
+    getPath((0, 1), raceAns = "Elf", classAns = "Fighter")
+
 
     #conn.execute("PRAGMA foreign_keys = ON;")
     conn.commit()
